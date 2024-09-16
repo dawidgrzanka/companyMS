@@ -1,34 +1,67 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>Szczegóły produktu: {{ $product->name }}</h1>
+<div class="container">
+    <h1>{{ $product->name }}</h1>
+    <br>
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <a href="{{ route('products.index') }}" class="btn btn-outline-success mb-3">Powrót do listy produktów</a>
+        </div>
+    </div>
 
-<p><strong>Cena zakupu netto:</strong> {{ $product->purchase_price_netto }}</p>
-<p><strong>Cena zakupu brutto:</strong> {{ $product->purchase_price_brutto }}</p>
-<p><strong>Cena sprzedaży netto:</strong> {{ $product->sale_price_netto }}</p>
-<p><strong>Cena sprzedaży brutto:</strong> {{ $product->sale_price_brutto }}</p>
-<p><strong>Marża:</strong> {{ $product->margin }}%</p>
-<p><strong>Dostępna ilość:</strong> {{ $product->stock }}</p>
+    <div class="row">
+        <div class="col-md-8">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th scope="row">Kwota zakupu (Netto/Brutto)</th>
+                        <td>{{ number_format($product->purchase_price_netto, 2) }} zł/ {{ number_format($product->purchase_price_brutto, 2) }} zł</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Kwota sprzedaży (Netto/Brutto)</th>
+                        <td>{{ number_format($product->sale_price_netto, 2) }} zł / {{ number_format($product->sale_price_brutto, 2) }} zł</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Marża</th>
+                        <td>{{ $product->margin }}%</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Ilość</th>
+                        <td>{{ $product->stock }}</td>
+                    </tr>
+                </tbody>
+            </table>
 
-<a href="{{ route('stock.create', $product->id) }}">Dodaj ruch magazynowy</a>
+            <div class="mt-3">
+                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">Edytuj</a>
+                <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Usuń</button>
+                </form>
+            </div>
 
-<h2>Historia ruchów magazynowych</h2>
-<table>
-    <thead>
-        <tr>
-            <th>Typ ruchu</th>
-            <th>Ilość</th>
-            <th>Data</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($movements as $movement)
-        <tr>
-            <td>{{ $movement->movement_type == 'in' ? 'Przychód' : 'Rozchód' }}</td>
-            <td>{{ $movement->quantity }}</td>
-            <td>{{ $movement->created_at }}</td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
+            <br>
+            <hr>
+            <br>
+
+            <h4>Ruchy magazynowe</h4>
+            @if($product->stockMovements->count())
+                <ul class="list-group">
+                    @foreach($product->stockMovements as $movement)
+                        <li class="list-group-item">
+                            <strong>Data:</strong> {{ $movement->created_at->format('d M Y') }}<br>
+                            <strong>Typ:</strong> {{ $movement->type }}<br>
+                            <strong>Ilość:</strong> {{ $movement->quantity }}<br>
+                            <strong>Opis:</strong> {{ $movement->comment }}
+                        </li>
+                    @endforeach
+                </ul>
+            @else
+                <p>Brak wpisów</p>
+            @endif
+        </div>
+    </div>
+</div>
 @endsection

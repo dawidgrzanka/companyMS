@@ -18,4 +18,9 @@ class Product extends Model
         'margin', 
         'stock'
     ];
+
+    public function stockMovements()
+    {
+    return $this->hasMany(StockMovement::class);
+}
 }
