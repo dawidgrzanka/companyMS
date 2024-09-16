@@ -10,9 +10,10 @@ class StockMovement extends Model
     use HasFactory;
 
     protected $fillable = [
-        'product_id',
-        'movement_type',
-        'quantity',
+        'product_id', 
+        'movement_type', 
+        'quantity', 
+        'remarks'
     ];
 
     public function product()

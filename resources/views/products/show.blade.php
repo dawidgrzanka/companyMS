@@ -51,10 +51,15 @@
                 <ul class="list-group">
                     @foreach($product->stockMovements as $movement)
                         <li class="list-group-item">
-                            <strong>Data:</strong> {{ $movement->created_at->format('d M Y') }}<br>
-                            <strong>Typ:</strong> {{ $movement->type }}<br>
+                            <strong>Data:</strong> {{ $movement->created_at->format('d M Y H:i') }}<br>
+                            <strong>Typ:</strong> 
+                                @if($movement->movement_type === 'in')
+                                    Przyjęcie
+                                @elseif($movement->movement_type === 'out')
+                                    Wydanie
+                                @endif<br>
                             <strong>Ilość:</strong> {{ $movement->quantity }}<br>
-                            <strong>Opis:</strong> {{ $movement->comment }}
+                            <strong>Opis:</strong> {{ $movement->remarks }}
                         </li>
                     @endforeach
                 </ul>

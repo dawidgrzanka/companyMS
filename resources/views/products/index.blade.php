@@ -16,7 +16,7 @@
         </a>
     </div>
 </div>
-<button onclick="window.location='{{ route('products.create') }}'"type="button" class="btn btn-outline-success">{{ __('Dodaj Produkt') }}</button>
+<button onclick="window.location='{{ route('products.create') }}'" type="button" class="btn btn-outline-success">{{ __('Dodaj Produkt') }}</button>
 
 <table class="table table-hover mt-3">
     <thead>
@@ -40,6 +40,7 @@
             <td>
                 <a href="{{ route('products.show', $product->id) }}">Szczegóły</a> |
                 <a href="{{ route('products.edit', $product->id) }}">Edytuj</a> |
+                <a href="{{ route('stock.create', $product->id) }}">+/-</a> |
                 <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
