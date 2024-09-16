@@ -8,9 +8,18 @@ use Illuminate\Http\Request;
 class ServiceController extends Controller
 {
     // Wyświetlenie listy usług
-    public function index()
+    public function index(Request $request)
     {
-        $services = Service::all();
+        $services = Service::query();
+
+        // Wyszukiwanie
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $services->where('name', 'like', "%{$search}%");
+        }
+
+        $services = $services->paginate(10);
+
         return view('services.index', compact('services'));
     }
 

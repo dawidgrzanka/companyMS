@@ -35,7 +35,7 @@
                 <form action="{{ route('services.destroy', $service->id) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-link p-0">Usuń</button>
+                    <button type="submit">Usuń</button>
                 </form>
             </td>
         </tr>

@@ -25,12 +25,28 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="price_gross">Cena brutto</label>
-                        <input type="number" name="price_gross" id="price_gross" class="form-control" value="{{ $service->price_gross }}" step="0.01" required>
+                        <input type="number" name="price_gross" id="price_gross" class="form-control" value="{{ $service->price_gross }}" step="0.01" required readonly>
                     </div>
-                    <button type="submit" class="btn btn-primary">Zaktualizuj</button>
+                    <button type="submit" class="btn btn-outline-primary">Zaktualizuj</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const priceNetto = document.getElementById('price_net');
+        const priceBrutto = document.getElementById('price_gross');
+
+        function updatePrices() {
+            const netto = parseFloat(priceNetto.value) || 0;
+            const brutto = netto * 1.06 * 1.08;
+            priceBrutto.value = brutto.toFixed(2);
+        }
+
+        priceNetto.addEventListener('input', updatePrices);
+    });
+</script>
+
 @endsection
