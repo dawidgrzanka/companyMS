@@ -7,6 +7,10 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\OfferController;
+
+Route::resource('offers', OfferController::class);
+
 Route::get('/', function () {
     return view('welcome');
 });
