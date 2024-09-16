@@ -42,6 +42,9 @@
                             </x-slot>
                         </x-dropdown>
                     </div>
+                    <x-nav-link :href="route('clients.index')" :active="request()->routeIs('clients.index')">
+                        {{ __('Klienci') }}
+                    </x-nav-link>
                 </div>
             </div>
 

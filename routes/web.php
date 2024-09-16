@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StockMovementController;
+use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -29,5 +30,8 @@ Route::get('products/{product}/stock-movement/history', [StockMovementController
 
 // Ostrzeżenia o niskich stanach magazynowych
 Route::get('products/low-stock', [ProductController::class, 'checkLowStock'])->name('products.low_stock');
+
+// ClientController
+Route::resource('clients', ClientController::class);
 
 require __DIR__.'/auth.php';
