@@ -6,6 +6,10 @@ use App\Http\Controllers\StockMovementController;
 use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\OfferController;
+
+Route::resource('offers', OfferController::class);
+
 Route::get('/', function () {
     return view('welcome');
 });
