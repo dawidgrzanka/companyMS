@@ -28,12 +28,12 @@
                 <td>{{ $client->company_name }}</td>
                 <td>{{ $client->nip }}</td>
                 <td>
-                    <a href="{{ route('clients.show', $client) }}" class="btn btn-info btn-sm">Pokaż</a>
-                    <a href="{{ route('clients.edit', $client) }}" class="btn btn-warning btn-sm">Edytuj</a>
+                    <a href="{{ route('clients.show', $client) }}" class="btn btn-outline-info btn-sm">Pokaż</a>
+                    <a href="{{ route('clients.edit', $client) }}" class="btn btn-outline-warning btn-sm">Edytuj</a>
                     <form action="{{ route('clients.destroy', $client) }}" method="POST" style="display: inline-block;">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Czy na pewno chcesz usunąć?')">Usuń</button>
+                        <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Czy na pewno chcesz usunąć?')">Usuń</button>
                     </form>
                 </td>
             </tr>

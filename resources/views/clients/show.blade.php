@@ -35,13 +35,13 @@
                     </div>
 
                     <div class="mt-3">
-                        <a href="{{ route('clients.edit', $client->id) }}" class="btn btn-primary">Edytuj</a>
+                        <a href="{{ route('clients.edit', $client->id) }}" class="btn btn-outline-primary">Edytuj</a>
                         <form action="{{ route('clients.destroy', $client->id) }}" method="POST" class="d-inline-block">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Czy na pewno chcesz usunąć tego klienta?')">Usuń</button>
+                            <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Czy na pewno chcesz usunąć tego klienta?')">Usuń</button>
                         </form>
-                        <a href="{{ route('clients.index') }}" class="btn btn-secondary">Powrót do listy klientów</a>
+                        <a href="{{ route('clients.index') }}" class="btn btn-outline-secondary">Powrót do listy klientów</a>
                     </div>
                 </div>
             </div>

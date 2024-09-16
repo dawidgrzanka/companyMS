@@ -45,7 +45,7 @@
             <textarea name="address" class="form-control">{{ isset($client) ? $client->address : old('address') }}</textarea>
         </div>
         <br>
-        <button type="submit" class="btn btn-success">{{ isset($client) ? 'Zapisz' : 'Dodaj' }}</button>
+        <button type="submit" class="btn btn-outline-success">{{ isset($client) ? 'Zapisz' : 'Dodaj' }}</button>
     </form>
 </div>
 @endsection
