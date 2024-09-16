@@ -7,10 +7,14 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\NoteController;
 use Illuminate\Support\Facades\Route;
 
 Route::resource('offers', OfferController::class);
 Route::resource('invoices', InvoiceController::class);
+Route::resource('meetings', MeetingController::class);
+Route::resource('notes', NoteController::class);
 
 Route::get('invoices/{invoice}/exportToPDF', [InvoiceController::class, 'exportToPDF'])->name('invoices.exportToPDF');
 
