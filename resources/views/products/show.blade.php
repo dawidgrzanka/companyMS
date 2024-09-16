@@ -34,11 +34,11 @@
             </table>
 
             <div class="mt-3">
-                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">Edytuj</a>
+                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-outline-warning">Edytuj</a>
                 <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Usuń</button>
+                    <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Are you sure?')">Usuń</button>
                 </form>
             </div>
 

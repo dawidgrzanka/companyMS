@@ -45,8 +45,8 @@
             @enderror
         </div>
 
-        <button type="submit" class="btn btn-primary">Zapisz Ruch</button>
-        <a href="{{ route('products.index') }}" class="btn btn-secondary">Powrót do Listy Produktów</a>
+        <button type="submit" class="btn btn-outline-primary">Zapisz Ruch</button>
+        <a href="{{ route('products.index') }}" class="btn btn-outline-secondary">Powrót do Listy Produktów</a>
     </form>
 </div>
 @endsection

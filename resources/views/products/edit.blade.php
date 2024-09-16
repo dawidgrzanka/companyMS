@@ -49,8 +49,8 @@
         </div>
 
         <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-primary">Zaktualizuj produkt</button>
-            <a href="{{ route('products.index') }}" class="btn btn-secondary ms-2">Anuluj</a>
+            <button type="submit" class="btn btn-outline-primary">Zaktualizuj produkt</button>
+            <a href="{{ route('products.index') }}" class="btn btn-outline-secondary ms-2">Anuluj</a>
         </div>
     </div>
 </form>
