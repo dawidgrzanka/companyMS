@@ -5,11 +5,14 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StockMovementController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\OfferController;
+use App\Http\Controllers\InvoiceController;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\OfferController;
-
 Route::resource('offers', OfferController::class);
+Route::resource('invoices', InvoiceController::class);
+
+Route::get('invoices/{invoice}/exportToPDF', [InvoiceController::class, 'exportToPDF'])->name('invoices.exportToPDF');
 
 Route::get('/', function () {
     return view('welcome');
