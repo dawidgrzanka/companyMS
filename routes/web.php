@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StockMovementController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -33,5 +34,8 @@ Route::get('products/low-stock', [ProductController::class, 'checkLowStock'])->n
 
 // ClientController
 Route::resource('clients', ClientController::class);
+
+// ServiceController
+Route::resource('services', ServiceController::class);
 
 require __DIR__.'/auth.php';
