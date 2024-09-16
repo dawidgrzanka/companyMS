@@ -18,4 +18,9 @@ class Client extends Model
         'company_name',
         'nip',
     ];
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
 }

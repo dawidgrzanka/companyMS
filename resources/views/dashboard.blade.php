@@ -27,7 +27,7 @@
             </div>
             <div class="card-body">
                 <p>Twórz i zarządzaj ofertami oraz kosztorysami.</p>
-                <a href="{{ route('products.index') }}" class="btn btn-outline-secondary mt-2">Zarządzaj ofertami</a>
+                <a href="{{ route('offers.index') }}" class="btn btn-outline-secondary mt-2">Zarządzaj ofertami</a>
             </div>
         </div>
     </div>

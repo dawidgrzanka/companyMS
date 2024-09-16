@@ -54,6 +54,9 @@
                     <x-nav-link :href="route('invoices.index')" :active="request()->routeIs('invoices.index')">
                         {{ __('Faktury') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('tasks.index')" :active="request()->routeIs('tasks.index')">
+                        {{ __('Realizacje') }}
+                    </x-nav-link>
                 </div>
             </div>
 
