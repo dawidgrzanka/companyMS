@@ -58,5 +58,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/tasks/{task}/materials/{materialUsage}/increase', [TaskController::class, 'increaseMaterialQuantity'])->name('tasks.increaseMaterial');
     Route::post('/tasks/{task}/materials/{materialUsage}/decrease', [TaskController::class, 'decreaseMaterialQuantity'])->name('tasks.decreaseMaterial');
     Route::delete('/tasks/{task}/materials/{materialUsage}/remove', [TaskController::class, 'removeMaterial'])->name('tasks.removeMaterial');
+    Route::get('/tasks/{id}/export-pdf', [TaskController::class, 'exportToPdf'])->name('tasks.exportPdf');
+
 });
 require __DIR__.'/auth.php';

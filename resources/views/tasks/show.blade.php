@@ -13,7 +13,8 @@
     </div>
 @endif
 <h1>Szczegóły zlecenia</h1>
-<br>
+<a href="{{ route('tasks.exportPdf', $task->id) }}" target="_blank" class="btn btn-primary mt-3">Eksportuj do PDF</a>
+</br>
 <div class="card">
     <div class="card-header">{{ $task->name }}</div>
     <div class="card-body">

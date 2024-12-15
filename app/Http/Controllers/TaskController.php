@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\MaterialUsage;
 use App\Models\Product;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class TaskController extends Controller
 {
@@ -206,6 +207,35 @@ class TaskController extends Controller
 
             return redirect()->route('tasks.show', $taskId)
                             ->with('success', 'Materiał został usunięty, a magazyn zaktualizowany.');
+        }
+
+        public function exportToPdf($id)
+        {
+            // Pobieranie danych z zadania
+            $task = Task::with('materialUsages.product')->findOrFail($id);
+
+            // Obliczanie aktualnych wydatków na materiały
+            $current_material_expenses = $task->materialUsages->sum(function ($usage) {
+                return $usage->quantity * $usage->product->purchase_price_netto;
+            });
+
+            // Obliczanie sum kolumn
+            $total_purchase_price = $task->materialUsages->sum(function ($usage) {
+                return $usage->quantity * $usage->product->purchase_price_netto;
+            });
+
+            $total_sale_price = $task->materialUsages->sum(function ($usage) {
+                return $usage->quantity * $usage->product->sale_price_netto;
+            });
+
+            // Pozostały budżet
+            $remaining_budget = $task->planned_material_budget - $current_material_expenses;
+
+            // Generowanie PDF z widoku
+            $pdf = Pdf::loadView('tasks.pdf', compact('task', 'current_material_expenses', 'remaining_budget', 'total_purchase_price', 'total_sale_price'));
+
+            // Zwracanie pliku PDF jako odpowiedź
+            return $pdf->stream('zlecenie_' . $task->id . '.pdf');
         }
 
 
