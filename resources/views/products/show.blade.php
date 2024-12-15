@@ -19,6 +19,10 @@
                         <td>{{ number_format($product->purchase_price_netto, 2) }} zł/ {{ number_format($product->purchase_price_brutto, 2) }} zł</td>
                     </tr>
                     <tr>
+                        <th scope="row">Numer katalogowy</th>
+                        <td>{{ ($product->catalog_number) }} </td>
+                    </tr>
+                    <tr>
                         <th scope="row">Kwota sprzedaży (Netto/Brutto)</th>
                         <td>{{ number_format($product->sale_price_netto, 2) }} zł / {{ number_format($product->sale_price_brutto, 2) }} zł</td>
                     </tr>

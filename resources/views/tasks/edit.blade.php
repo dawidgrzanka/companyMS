@@ -27,6 +27,10 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="planned_material_budget">Planowany budżet na materiały</label>
+                        <input type="number" name="planned_material_budget" id="planned_material_budget" class="form-control" step="0.01" value="{{ $task->planned_material_budget }}" required>
+                    </div>
                     <div class="form-group mb-3">
                         <label for="status">Status</label>
                         <select name="status" id="status" class="form-control" required>

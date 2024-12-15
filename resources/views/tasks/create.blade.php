@@ -41,6 +41,10 @@
                         </select>
                     </div>
                     <div class="form-group mb-3">
+                        <label for="status">Planowany budżet na materiał</label>
+                        <input type="number" name="planned_material_budget" id="planned_material_budget" class="form-control" step="0.01" required>
+                    </div>
+                    <div class="form-group mb-3">
                         <label for="status">Status</label>
                         <select name="status" id="status" class="form-control" required>
                             <option value="in_progress">W trakcie realizacji</option>

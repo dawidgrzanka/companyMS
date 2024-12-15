@@ -53,4 +53,10 @@ Route::resource('services', ServiceController::class);
 // TaskController
 Route::resource('tasks', TaskController::class);
 
+Route::middleware('auth')->group(function () {
+    Route::post('/tasks/{task}/add-material', [TaskController::class, 'addMaterialToTask'])->name('tasks.addMaterial');
+    Route::post('/tasks/{task}/materials/{materialUsage}/increase', [TaskController::class, 'increaseMaterialQuantity'])->name('tasks.increaseMaterial');
+    Route::post('/tasks/{task}/materials/{materialUsage}/decrease', [TaskController::class, 'decreaseMaterialQuantity'])->name('tasks.decreaseMaterial');
+    Route::delete('/tasks/{task}/materials/{materialUsage}/remove', [TaskController::class, 'removeMaterial'])->name('tasks.removeMaterial');
+});
 require __DIR__.'/auth.php';

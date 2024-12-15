@@ -44,6 +44,7 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required',
             'purchase_price_netto' => 'required|numeric',
+            'catalog_number' => 'nullable|string|max:255',
             'purchase_price_brutto' => 'required|numeric',
             'sale_price_netto' => 'required|numeric',
             'sale_price_brutto' => 'required|numeric',
@@ -84,6 +85,7 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required',
             'purchase_price_netto' => 'required|numeric',
+            'catalog_number' => 'nullable|string|max:255',
             'purchase_price_brutto' => 'required|numeric',
             'sale_price_netto' => 'required|numeric',
             'sale_price_brutto' => 'required|numeric',

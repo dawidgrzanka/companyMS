@@ -16,11 +16,17 @@ class Product extends Model
         'sale_price_netto', 
         'sale_price_brutto', 
         'margin', 
-        'stock'
+        'stock',
+        'catalog_number'
     ];
 
     public function stockMovements()
     {
-    return $this->hasMany(StockMovement::class);
-}
+        return $this->hasMany(StockMovement::class);
+    }
+
+    public function materialUsages()
+    {
+        return $this->hasMany(MaterialUsage::class);
+    }
 }

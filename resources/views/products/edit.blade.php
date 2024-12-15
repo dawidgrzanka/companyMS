@@ -13,6 +13,10 @@
                 <label for="name" class="form-label">Nazwa produktu</label>
                 <input type="text" id="name" name="name" class="form-control" value="{{ old('name', $product->name) }}" required>
             </div>
+            <div class="form-group mb-3">
+                <label for="catalog_number">Numer katalogowy</label>
+                <input type="text" name="catalog_number" id="catalog_number" class="form-control" value="{{ old('catalog_number', $product->catalog_number ?? '') }}">
+            </div>
             <div class="col-md-6">
                 <label for="purchase_price_netto" class="form-label">Cena zakupu netto</label>
                 <input type="number" id="purchase_price_netto" name="purchase_price_netto" class="form-control" step="0.01" value="{{ old('purchase_price_netto', $product->purchase_price_netto) }}" required>
