@@ -91,23 +91,27 @@ class TaskController extends Controller
     }
 
     public function show($id)
-        {
-            // Sprawdzanie, czy istnieje zadanie o danym ID
-            $task = Task::with('materialUsages.product')->findOrFail($id);
-
-            // Obliczanie aktualnych wydatków na materiały
-            $current_material_expenses = $task->materialUsages->sum(function($usage) {
-                return $usage->quantity * $usage->product->purchase_price_netto;
-            });
-
-            // Pozostały budżet
-            $remaining_budget = $task->planned_material_budget - $current_material_expenses;
-
-            $products = Product::all(); // Pobieramy wszystkie dostępne materiały
-
-            // Przekazanie danych do widoku
-            return view('tasks.show', compact('task', 'products', 'current_material_expenses', 'remaining_budget'));
-        }
+    {
+        // Sprawdzanie, czy istnieje zadanie o danym ID
+        $task = Task::findOrFail($id);
+    
+        // Pobieranie materiałów z paginacją
+        $materials = $task->materialUsages()->with('product')->paginate(5);
+    
+        // Obliczanie aktualnych wydatków na materiały
+        $current_material_expenses = $task->materialUsages->sum(function ($usage) {
+            return $usage->quantity * $usage->product->purchase_price_netto;
+        });
+    
+        // Pozostały budżet
+        $remaining_budget = $task->planned_material_budget - $current_material_expenses;
+    
+        // Pobieranie wszystkich produktów (materiałów) do listy wyboru
+        $products = Product::all();
+    
+        // Przekazanie danych do widoku
+        return view('tasks.show', compact('task', 'materials', 'products', 'current_material_expenses', 'remaining_budget'));
+    }
 
         public function addMaterialToTask(Request $request, $taskId)
         {

@@ -36,7 +36,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($task->materialUsages as $usage)
+                @foreach($materials as $usage)
                 <tr>
                     <td>{{ $usage->product->name }} ({{ $usage->product->catalog_number }})</td>
                     <td>{{ $usage->quantity }}</td>
@@ -67,6 +67,11 @@
                 @endforeach
             </tbody>
         </table>
+
+        <!-- Linki paginacji -->
+<div class="mt-3">
+    {{ $materials->links() }}
+</div>
 
         @if($task->files->isNotEmpty())
             <h5>Pliki:</h5>
