@@ -209,7 +209,7 @@ class TaskController extends Controller
                             ->with('success', 'Materiał został usunięty, a magazyn zaktualizowany.');
         }
 
-        public function exportToPdf($id)
+        public function exportToPdf(Request $request, $id)
         {
             // Pobieranie danych z zadania
             $task = Task::with('materialUsages.product')->findOrFail($id);
@@ -231,8 +231,20 @@ class TaskController extends Controller
             // Pozostały budżet
             $remaining_budget = $task->planned_material_budget - $current_material_expenses;
 
+            // Pobieranie opcji z żądania
+            $includePurchasePrice = $request->has('include_purchase_price');
+            $includeSalePrice = $request->has('include_sale_price');
+
             // Generowanie PDF z widoku
-            $pdf = Pdf::loadView('tasks.pdf', compact('task', 'current_material_expenses', 'remaining_budget', 'total_purchase_price', 'total_sale_price'));
+            $pdf = Pdf::loadView('tasks.pdf', compact(
+                'task',
+                'current_material_expenses',
+                'remaining_budget',
+                'total_purchase_price',
+                'total_sale_price',
+                'includePurchasePrice',
+                'includeSalePrice'
+            ));
 
             // Zwracanie pliku PDF jako odpowiedź
             return $pdf->stream('zlecenie_' . $task->id . '.pdf');

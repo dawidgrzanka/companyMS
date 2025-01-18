@@ -13,7 +13,20 @@
     </div>
 @endif
 <h1>Szczegóły zlecenia</h1>
-<a href="{{ route('tasks.exportPdf', $task->id) }}" target="_blank" class="btn btn-primary mt-3">Eksportuj do PDF</a>
+<form action="{{ route('tasks.exportToPdf', $task->id) }}" method="GET">
+    @csrf
+    <label>
+        <input type="checkbox" name="include_purchase_price" value="1">
+        Wydruk cen zakupu netto
+    </label>
+    <br>
+    <label>
+        <input type="checkbox" name="include_sale_price" value="1">
+        Wydruk cen sprzedaży netto
+    </label>
+    <br>
+    <button type="submit" class="btn btn-primary mt-3">Generuj PDF</button>
+</form>
 </br>
 <div class="card">
     <div class="card-header">{{ $task->name }}</div>

@@ -52,41 +52,50 @@
             <h1>Zlecenie: {{ $task->name }}</h1>
             <p><strong>Opis:</strong> {{ $task->description }}</p>
             <p><strong>Status:</strong> {{ $task->status }}</p>
-            <p><strong>Budżet planowany:</strong> {{ number_format($task->planned_material_budget, 2) }} zł</p>
-            <p><strong>Wydatki na materiały:</strong> {{ number_format($current_material_expenses, 2) }} zł</p>
-            <p><strong>Pozostały budżet:</strong> {{ number_format($remaining_budget, 2) }} zł</p>
 
             <h3>Materiały zużyte:</h3>
             <table>
-            <thead>
-                <tr>
-                    <th>Nazwa materiału</th>
-                    <th>Ilość</th>
-                    <th>Cena zakupu netto</th>
-                    <th>Cena sprzedaży netto</th>
-                    <th>Wartość netto</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($task->materialUsages as $usage)
+                <thead>
                     <tr>
-                        <td>{{ $usage->product->name }}</td>
-                        <td>{{ $usage->quantity }}</td>
-                        <td>{{ number_format($usage->product->purchase_price_netto, 2) }} zł</td>
-                        <td>{{ number_format($usage->product->sale_price_netto, 2) }} zł</td>
-                        <td>{{ number_format($usage->quantity * $usage->product->purchase_price_netto, 2) }} zł</td>
+                        <th>Nazwa materiału</th>
+                        <th>Ilość</th>
+                        @if ($includePurchasePrice)
+                            <th>Cena zakupu netto</th>
+                        @endif
+                        @if ($includeSalePrice)
+                            <th>Cena sprzedaży netto</th>
+                        @endif
+                        <th>Wartość netto</th>
                     </tr>
-                @endforeach
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th colspan="2">Razem:</th>
-                    <th>{{ number_format($total_purchase_price, 2) }} zł</th>
-                    <th>{{ number_format($total_sale_price, 2) }} zł</th>
-                    <th></th>
-                </tr>
-            </tfoot>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($task->materialUsages as $usage)
+                        <tr>
+                            <td>{{ $usage->product->name }}</td>
+                            <td>{{ $usage->quantity }}</td>
+                            @if ($includePurchasePrice)
+                                <td>{{ number_format($usage->product->purchase_price_netto, 2) }} zł</td>
+                            @endif
+                            @if ($includeSalePrice)
+                                <td>{{ number_format($usage->product->sale_price_netto, 2) }} zł</td>
+                            @endif
+                            <td>{{ number_format($usage->quantity * $usage->product->purchase_price_netto, 2) }} zł</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="2">Razem:</th>
+                        @if ($includePurchasePrice)
+                            <th>{{ number_format($total_purchase_price, 2) }} zł</th>
+                        @endif
+                        @if ($includeSalePrice)
+                            <th>{{ number_format($total_sale_price, 2) }} zł</th>
+                        @endif
+                        <th></th>
+                    </tr>
+                </tfoot>
+            </table>
     </div>
     
 <div class="footer">

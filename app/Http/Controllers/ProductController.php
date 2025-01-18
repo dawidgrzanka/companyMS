@@ -14,7 +14,10 @@ class ProductController extends Controller
         // Wyszukiwanie
         if ($request->has('search')) {
             $search = $request->input('search');
-            $query->where('name', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('catalog_number', 'like', "%{$search}%");
+            });
         }
 
         // Sortowanie
@@ -27,7 +30,7 @@ class ProductController extends Controller
             $query->orderBy('id', 'desc');
         }
 
-        $products = $query->paginate(10);
+        $products = $query->paginate(20);
 
         return view('products.index', compact('products'));
     }
