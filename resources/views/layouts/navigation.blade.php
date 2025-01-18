@@ -17,7 +17,7 @@
                         {{ __('START') }}
                     </x-nav-link>
                     <x-nav-link :href="route('products.index')" :active="request()->routeIs('services.index')">
-                        {{ __('Usługi') }}
+                        {{ __('Materiał') }}
                     </x-nav-link>
                     <div class="hidden sm:flex sm:items-center sm:ml-6 pt-1">
                         <x-dropdown align="right" width="48">
