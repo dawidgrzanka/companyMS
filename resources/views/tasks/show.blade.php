@@ -144,6 +144,36 @@ document.addEventListener('DOMContentLoaded', function() {
     const errorContainer = document.getElementById('error-container');
     const materialsTableContainer = document.getElementById('materials-table-container');
 
+    // Handle pagination clicks
+    materialsTableContainer.addEventListener('click', function(e) {
+        // Check if clicked element is a pagination link
+        if (e.target.matches('.pagination a')) {
+            e.preventDefault();
+            
+            // Show loading spinner
+            loadingSpinner.style.display = 'block';
+            
+            // Get the URL from the pagination link
+            const url = e.target.href;
+            
+            // Fetch the new page
+            fetch(url + '&partial=true')
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newTable = doc.getElementById('materials-table-container');
+                    materialsTableContainer.innerHTML = newTable.innerHTML;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                })
+                .finally(() => {
+                    loadingSpinner.style.display = 'none';
+                });
+        }
+    });
+
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         
