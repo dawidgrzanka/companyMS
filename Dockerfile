@@ -1,8 +1,7 @@
 FROM richarvey/nginx-php-fpm:latest
 
 # Install Node.js and npm
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs
+RUN apk add --update nodejs npm
 
 # Install dependencies
 COPY composer.json composer.lock ./
