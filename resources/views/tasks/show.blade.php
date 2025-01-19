@@ -146,24 +146,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Handle pagination clicks
     materialsTableContainer.addEventListener('click', function(e) {
-        // Check if clicked element is a pagination link
-        if (e.target.matches('.pagination a')) {
+        // Find closest pagination link (handles clicks on span elements inside the link too)
+        const paginationLink = e.target.closest('.pagination a');
+        if (paginationLink) {
             e.preventDefault();
+            e.stopPropagation();
             
             // Show loading spinner
             loadingSpinner.style.display = 'block';
             
             // Get the URL from the pagination link
-            const url = e.target.href;
+            const url = paginationLink.href;
             
             // Fetch the new page
-            fetch(url + '&partial=true')
+            fetch(url + (url.includes('?') ? '&' : '?') + 'partial=true')
                 .then(response => response.text())
                 .then(html => {
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(html, 'text/html');
                     const newTable = doc.getElementById('materials-table-container');
                     materialsTableContainer.innerHTML = newTable.innerHTML;
+                    
+                    // Update URL without page refresh
+                    window.history.pushState({}, '', url);
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -197,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.success) {
                 // Refresh the materials table
-                fetch(window.location.href + '?partial=true')
+                fetch(window.location.href + (location.search ? '&' : '?') + 'partial=true')
                     .then(response => response.text())
                     .then(html => {
                         const parser = new DOMParser();
