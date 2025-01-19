@@ -89,9 +89,46 @@
                 </tbody>
             </table>
 
-            <!-- Linki paginacji -->
+            <!-- Custom pagination links -->
             <div class="mt-3">
-                {{ $materials->links() }}
+                @if ($materials->hasPages())
+                    <ul class="pagination">
+                        {{-- Previous Page Link --}}
+                        @if ($materials->onFirstPage())
+                            <li class="page-item disabled">
+                                <span class="page-link">«</span>
+                            </li>
+                        @else
+                            <li class="page-item">
+                                <button class="page-link" data-page="{{ $materials->currentPage() - 1 }}">«</button>
+                            </li>
+                        @endif
+
+                        {{-- Pagination Elements --}}
+                        @foreach ($materials->getUrlRange(1, $materials->lastPage()) as $page => $url)
+                            @if ($page == $materials->currentPage())
+                                <li class="page-item active">
+                                    <span class="page-link">{{ $page }}</span>
+                                </li>
+                            @else
+                                <li class="page-item">
+                                    <button class="page-link" data-page="{{ $page }}">{{ $page }}</button>
+                                </li>
+                            @endif
+                        @endforeach
+
+                        {{-- Next Page Link --}}
+                        @if ($materials->hasMorePages())
+                            <li class="page-item">
+                                <button class="page-link" data-page="{{ $materials->currentPage() + 1 }}">»</button>
+                            </li>
+                        @else
+                            <li class="page-item disabled">
+                                <span class="page-link">»</span>
+                            </li>
+                        @endif
+                    </ul>
+                @endif
             </div>
         </div>
 
@@ -146,29 +183,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Handle pagination clicks
     materialsTableContainer.addEventListener('click', function(e) {
-        // Find closest pagination link (handles clicks on span elements inside the link too)
-        const paginationLink = e.target.closest('.pagination a');
-        if (paginationLink) {
+        const pageButton = e.target.closest('.page-link');
+        if (pageButton && !pageButton.parentElement.classList.contains('disabled') && pageButton.dataset.page) {
             e.preventDefault();
             e.stopPropagation();
             
             // Show loading spinner
             loadingSpinner.style.display = 'block';
             
-            // Get the URL from the pagination link
-            const url = paginationLink.href;
+            // Construct the URL with the page parameter
+            const baseUrl = window.location.pathname;
+            const url = `${baseUrl}?page=${pageButton.dataset.page}`;
             
             // Fetch the new page
-            fetch(url + (url.includes('?') ? '&' : '?') + 'partial=true')
+            fetch(url + '&partial=true')
                 .then(response => response.text())
                 .then(html => {
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(html, 'text/html');
                     const newTable = doc.getElementById('materials-table-container');
                     materialsTableContainer.innerHTML = newTable.innerHTML;
-                    
-                    // Update URL without page refresh
-                    window.history.pushState({}, '', url);
                 })
                 .catch(error => {
                     console.error('Error:', error);
