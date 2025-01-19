@@ -31,11 +31,11 @@ ENV RUN_SCRIPTS 1
 ENV REAL_IP_HEADER 1
 ENV SKIP_COMPOSER 1
 
-# Generate application key if not set
-RUN php artisan key:generate --force
+# Set up Laravel application
 RUN php artisan config:cache
 RUN php artisan route:cache
 RUN php artisan view:cache
+RUN php artisan storage:link
 
 # Set correct permissions
 RUN chown -R nginx:nginx /var/www/html/storage /var/www/html/bootstrap/cache
