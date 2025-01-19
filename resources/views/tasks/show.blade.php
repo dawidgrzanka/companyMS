@@ -38,54 +38,62 @@
         <p><strong>Pozostały budżet do wykorzystania:</strong> {{ number_format($remaining_budget, 2) }} PLN</p>
         <p><strong>Status:</strong> {{ $task->status }}</p>
 
-        <table class="table table-hover mt-3">
-            <thead>
-                <tr>
-                    <th scope="col">Nazwa materiału</th>
-                    <th scope="col">Ilość</th>
-                    <th scope="col">Dostępna ilość w magazynie</th>
-                    <th scope="col">Cena zakupu netto</th>
-                    <th scope="col">Cena sprzedaży netto</th>
-                    <th scope="col">Akcje</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($materials as $usage)
-                <tr>
-                    <td>{{ $usage->product->name }} ({{ $usage->product->catalog_number }})</td>
-                    <td>{{ $usage->quantity }}</td>
-                    <td>{{ $usage->product->stock }}</td>
-                    <td>{{ $usage->product->purchase_price_netto }}</td>
-                    <td>{{ $usage->product->sale_price_netto }}</td>
-                    <td>
-                        <!-- Przycisk zwiększania ilości -->
-                        <form action="{{ route('tasks.increaseMaterial', [$task->id, $usage->id]) }}" method="POST" style="display:inline;">
-                            @csrf
-                            <button type="submit" class="btn btn-success btn-sm">Zwiększ ilość</button>
-                        </form>
+        <div id="materials-table-container">
+            <div id="loading-spinner" style="display: none;" class="text-center my-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Ładowanie...</span>
+                </div>
+            </div>
 
-                        <!-- Przycisk zmniejszania ilości -->
-                        <form action="{{ route('tasks.decreaseMaterial', [$task->id, $usage->id]) }}" method="POST" style="display:inline;">
-                            @csrf
-                            <button type="submit" class="btn btn-warning btn-sm">Zmniejsz ilość</button>
-                        </form>
+            <table class="table table-hover mt-3">
+                <thead>
+                    <tr>
+                        <th scope="col">Nazwa materiału</th>
+                        <th scope="col">Ilość</th>
+                        <th scope="col">Dostępna ilość w magazynie</th>
+                        <th scope="col">Cena zakupu netto</th>
+                        <th scope="col">Cena sprzedaży netto</th>
+                        <th scope="col">Akcje</th>
+                    </tr>
+                </thead>
+                <tbody id="materials-table-body">
+                    @foreach($materials as $usage)
+                    <tr>
+                        <td>{{ $usage->product->name }} ({{ $usage->product->catalog_number }})</td>
+                        <td>{{ $usage->quantity }}</td>
+                        <td>{{ $usage->product->stock }}</td>
+                        <td>{{ $usage->product->purchase_price_netto }}</td>
+                        <td>{{ $usage->product->sale_price_netto }}</td>
+                        <td>
+                            <!-- Przycisk zwiększania ilości -->
+                            <form action="{{ route('tasks.increaseMaterial', [$task->id, $usage->id]) }}" method="POST" style="display:inline;">
+                                @csrf
+                                <button type="submit" class="btn btn-success btn-sm">Zwiększ ilość</button>
+                            </form>
 
-                        <!-- Przycisk usunięcia materiału -->
-                        <form action="{{ route('tasks.removeMaterial', [$task->id, $usage->id]) }}" method="POST" style="display:inline;" onsubmit="return confirm('Czy na pewno chcesz usunąć ten materiał?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Usuń materiał</button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+                            <!-- Przycisk zmniejszania ilości -->
+                            <form action="{{ route('tasks.decreaseMaterial', [$task->id, $usage->id]) }}" method="POST" style="display:inline;">
+                                @csrf
+                                <button type="submit" class="btn btn-warning btn-sm">Zmniejsz ilość</button>
+                            </form>
 
-        <!-- Linki paginacji -->
-<div class="mt-3">
-    {{ $materials->links() }}
-</div>
+                            <!-- Przycisk usunięcia materiału -->
+                            <form action="{{ route('tasks.removeMaterial', [$task->id, $usage->id]) }}" method="POST" style="display:inline;" onsubmit="return confirm('Czy na pewno chcesz usunąć ten materiał?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Usuń materiał</button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+            <!-- Linki paginacji -->
+            <div class="mt-3">
+                {{ $materials->links() }}
+            </div>
+        </div>
 
         @if($task->files->isNotEmpty())
             <h5>Pliki:</h5>
@@ -103,7 +111,7 @@
 <div class="card mt-4">
     <div class="card-header">Dodaj materiał do realizacji</div>
     <div class="card-body">
-        <form action="{{ route('tasks.addMaterial', $task->id) }}" method="POST">
+        <form id="add-material-form" action="{{ route('tasks.addMaterial', $task->id) }}" method="POST">
             @csrf
             <div class="form-group">
                 <label for="product_id">Materiał</label>
@@ -124,15 +132,74 @@
     </div>
 
     <!-- Obsługa błędów -->
-    @if ($errors->any())
-        <div class="alert alert-danger mt-3">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    <div id="error-container" class="alert alert-danger mt-3" style="display: none;">
+    </div>
 </div>
 
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('add-material-form');
+    const loadingSpinner = document.getElementById('loading-spinner');
+    const errorContainer = document.getElementById('error-container');
+    const materialsTableContainer = document.getElementById('materials-table-container');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Show loading spinner
+        loadingSpinner.style.display = 'block';
+        errorContainer.style.display = 'none';
+        
+        // Get form data
+        const formData = new FormData(form);
+
+        // Send AJAX request
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Refresh the materials table
+                fetch(window.location.href + '?partial=true')
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const newTable = doc.getElementById('materials-table-container');
+                        materialsTableContainer.innerHTML = newTable.innerHTML;
+                        
+                        // Reset form
+                        form.reset();
+                        
+                        // Show success message
+                        const successAlert = document.createElement('div');
+                        successAlert.className = 'alert alert-success mt-3';
+                        successAlert.textContent = data.message;
+                        form.parentElement.appendChild(successAlert);
+                        setTimeout(() => successAlert.remove(), 3000);
+                    });
+            } else {
+                // Show error message
+                errorContainer.textContent = data.message;
+                errorContainer.style.display = 'block';
+            }
+        })
+        .catch(error => {
+            errorContainer.textContent = 'Wystąpił błąd podczas dodawania materiału.';
+            errorContainer.style.display = 'block';
+        })
+        .finally(() => {
+            loadingSpinner.style.display = 'none';
+        });
+    });
+});
+</script>
+@endpush
 @endsection
