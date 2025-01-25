@@ -60,7 +60,7 @@
                         <th>Nazwa materiału</th>
                         <th>Ilość</th>
                         @if ($includePurchasePrice)
-                            <th>Cena zakupu netto</th>
+                            <th>Cena jed. netto</th>
                         @endif
                         @if ($includeSalePrice)
                             <th>Cena sprzedaży netto</th>
@@ -75,11 +75,13 @@
                             <td>{{ $usage->quantity }}</td>
                             @if ($includePurchasePrice)
                                 <td>{{ number_format($usage->product->purchase_price_netto, 2) }} zł</td>
+                                <td>{{ number_format($usage->quantity * $usage->product->purchase_price_netto, 2) }} zł</td>
                             @endif
                             @if ($includeSalePrice)
                                 <td>{{ number_format($usage->product->sale_price_netto, 2) }} zł</td>
+                                <td>{{ number_format($usage->quantity * $usage->product->sale_price_netto, 2) }} zł</td>
                             @endif
-                            <td>{{ number_format($usage->quantity * $usage->product->purchase_price_netto, 2) }} zł</td>
+                            
                         </tr>
                     @endforeach
                 </tbody>
@@ -87,12 +89,13 @@
                     <tr>
                         <th colspan="2">Razem:</th>
                         @if ($includePurchasePrice)
+                            <th></tH>
                             <th>{{ number_format($total_purchase_price, 2) }} zł</th>
                         @endif
                         @if ($includeSalePrice)
+                            <th></th>
                             <th>{{ number_format($total_sale_price, 2) }} zł</th>
                         @endif
-                        <th></th>
                     </tr>
                 </tfoot>
             </table>
