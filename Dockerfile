@@ -1,43 +1,62 @@
-FROM richarvey/nginx-php-fpm:latest
+FROM php:8.2-fpm-bookworm
 
-# Install Node.js and npm
-RUN apk add --update nodejs npm
+# Copy composer.lock and composer.json
+COPY composer.lock composer.json /var/www/
+
+# Set working directory
+WORKDIR /var/www
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    wget \
+    lsb-release \
+    gnupg \
+    curl
+
+# Add repo MySQL
+RUN curl -s https://dev.mysql.com/downloads/repo/apt/ | grep mysql-apt-config \
+    | grep href | awk -F '=' '{gsub(/&p/, "", $4); print "https://dev.mysql.com/get/"$4}' \
+    | xargs wget -O mysql-apt-config.deb \
+    && dpkg -i mysql-apt-config.deb && apt update
 
 # Install dependencies
-COPY composer.json composer.lock ./
-RUN composer install --no-scripts --no-autoloader
+RUN apt-get update && apt-get install -y \
+    mariadb-client \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    locales \
+    zip \
+    jpegoptim optipng pngquant gifsicle \
+    vim \
+    unzip \
+    git \
+    nano
 
-# Copy package files and install npm dependencies
-COPY package.json package-lock.json ./
-RUN npm install
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copy application files
-COPY . .
+ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
-# Build assets and optimize
-RUN npm run build
-RUN composer dump-autoload --optimize
+# Install extensions
+RUN install-php-extensions gd pdo_mysql mysqli mbstring zip exif pcntl
 
-# Laravel configuration
-ENV APP_ENV production
-ENV APP_DEBUG false
-ENV LOG_CHANNEL stderr
-ENV COMPOSER_ALLOW_SUPERUSER 1
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Nginx and PHP configuration
-ENV WEBROOT /var/www/html/public
-ENV PHP_ERRORS_STDERR 1
-ENV RUN_SCRIPTS 1
-ENV REAL_IP_HEADER 1
-ENV SKIP_COMPOSER 1
+# Add user for laravel application
+RUN groupadd -g 1000 nginx
+RUN useradd -u 101 -ms /bin/bash -g nginx nginx
 
-# Set up Laravel application
-RUN php artisan config:cache
-RUN php artisan route:cache
-RUN php artisan view:cache
-RUN php artisan storage:link
+# Copy existing application directory contents
+# COPY . /var/www
 
-# Set correct permissions
-RUN chown -R nginx:nginx /var/www/html/storage /var/www/html/bootstrap/cache
+# Copy existing application directory permissions
+# COPY --chown=www:www . /var/www
 
-CMD ["/start.sh"] 
+# Change current user to www
+USER nginx
+
+# Expose port 9000 and start php-fpm server
+EXPOSE 9000
+CMD ["php-fpm"]
