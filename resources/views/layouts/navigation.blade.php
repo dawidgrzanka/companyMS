@@ -126,27 +126,65 @@
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('clients.index')" :active="request()->routeIs('clients.index')">
-                {{ __('Klienci') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('offers.index')" :active="request()->routeIs('offers.index')">
-                {{ __('Oferty') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('invoices.index')" :active="request()->routeIs('invoices.index')">
-                {{ __('Faktury') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('meetings.index')" :active="request()->routeIs('meetings.index')">
+<div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+    <div class="pt-2 pb-3 space-y-1">
+        <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+            {{ __('START') }}
+        </x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
+            {{ __('Materiał') }}
+        </x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
+            {{ __('Usługi') }}
+        </x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('offers.index')" :active="request()->routeIs('offers.index')">
+            {{ __('Oferty') }}
+        </x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('invoices.index')" :active="request()->routeIs('invoices.index')">
+            {{ __('Faktury') }}
+        </x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('meetings.index')" :active="request()->routeIs('meetings.index')">
+            {{ __('Spotkania') }}
+        </x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('notes.index')" :active="request()->routeIs('notes.index')">
+            {{ __('Notatki') }}
+        </x-responsive-nav-link>
+    </div>
+    
+    <!-- Dropdown for Inwestycje in Mobile -->
+    <x-dropdown align="right" width="48">
+        <x-slot name="trigger">
+            <button class="w-full text-left px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700">
+                {{ __('Inwestycje') }}
+            </button>
+        </x-slot>
+        <x-slot name="content">
+            <x-dropdown-link :href="route('tasks.index')" active="request()->routeIs('tasks.index')">
+                {{ __('Lista inwestycji') }}
+            </x-dropdown-link>
+            <x-dropdown-link :href="route('clients.index')" active="request()->routeIs('clients.index')">
+                {{ __('Lista klientów') }}
+            </x-dropdown-link>
+        </x-slot>
+    </x-dropdown>
+    
+    <!-- Dropdown for Biuro in Mobile -->
+    <x-dropdown align="right" width="48">
+        <x-slot name="trigger">
+            <button class="w-full text-left px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700">
+                {{ __('Biuro') }}
+            </button>
+        </x-slot>
+        <x-slot name="content">
+            <x-dropdown-link :href="route('meetings.index')" active="request()->routeIs('meetings.index')">
                 {{ __('Spotkania') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('notes.index')" :active="request()->routeIs('notes.index')">
+            </x-dropdown-link>
+            <x-dropdown-link :href="route('notes.index')" active="request()->routeIs('notes.index')">
                 {{ __('Notatki') }}
-            </x-responsive-nav-link>
-        </div>
+            </x-dropdown-link>
+        </x-slot>
+    </x-dropdown>
+</div>
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
