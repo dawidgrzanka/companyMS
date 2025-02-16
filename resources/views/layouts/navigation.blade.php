@@ -134,20 +134,11 @@
             <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
                 {{ __('Materiały') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('tasks.index')" :active="request()->routeIs('tasks.index')">
+                {{ __('Lista inwestycji') }}
+            </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('clients.index')" :active="request()->routeIs('clients.index')">
-                {{ __('Klienci') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('offers.index')" :active="request()->routeIs('offers.index')">
-                {{ __('Oferty') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('invoices.index')" :active="request()->routeIs('invoices.index')">
-                {{ __('Faktury') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('meetings.index')" :active="request()->routeIs('meetings.index')">
-                {{ __('Spotkania') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('notes.index')" :active="request()->routeIs('notes.index')">
-                {{ __('Notatki') }}
+                {{ __('Lista klientów') }}
             </x-responsive-nav-link>
         </div>
 
