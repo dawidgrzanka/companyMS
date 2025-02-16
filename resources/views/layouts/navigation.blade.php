@@ -43,6 +43,9 @@
                             </x-slot>
                         </x-dropdown>
                     </div>
+                    <x-nav-link :href="route('expenses.index')" :active="request()->routeIs('expenses.index')">
+                        {{ __('Wydatki') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
                         {{ __('Usługi') }}
                     </x-nav-link>
