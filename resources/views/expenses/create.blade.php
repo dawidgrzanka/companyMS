@@ -8,6 +8,15 @@
         @csrf
 
         <!-- Typ dokumentu -->
+        @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
         <div class="mb-3">
             <label for="type" class="form-label">Typ dokumentu</label>
             <select name="type" class="form-control" required>
@@ -34,6 +43,10 @@
         <div class="mb-3">
             <label for="issue_place" class="form-label">Miejsce wystawienia</label>
             <input type="text" name="issue_place" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="issue_place" class="form-label">Data sprzedaży</label>
+            <input type="date" name="sale_date" class="form-control" required>
         </div>
 
         <!-- Dane Sprzedawcy -->
