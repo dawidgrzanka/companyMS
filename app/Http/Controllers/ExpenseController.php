@@ -10,10 +10,37 @@ use Illuminate\Support\Facades\Log;
 
 class ExpenseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $expenses = Expense::with('items')->orderBy('issue_date', 'desc')->paginate(20);
-        return view('expenses.index', compact('expenses'));
+        $year = $request->get('year', now()->year);  // Pobieramy rok, domyślnie bieżący
+        $month = $request->get('month', now()->month);  // Pobieramy miesiąc, domyślnie bieżący
+
+        $expenses = Expense::with('items')
+            ->whereYear('issue_date', $year)
+            ->whereMonth('issue_date', $month)
+            ->orderBy('issue_date', 'desc')
+            ->paginate(20);
+
+        // Obliczanie sum za wybrany rok i miesiąc
+        $monthlyNetSum = Expense::whereYear('issue_date', $year)
+            ->whereMonth('issue_date', $month)
+            ->with('items')
+            ->get()
+            ->sum(function ($expense) {
+                return $expense->items->sum('net_value');
+            });
+        
+        $monthlyVatSum = Expense::whereYear('issue_date', $year)
+            ->whereMonth('issue_date', $month)
+            ->with('items')
+            ->get()
+            ->sum(function ($expense) {
+                return $expense->items->sum(function ($item) {
+                    return $item->gross_value - $item->net_value;  // Obliczanie VAT jako różnica między brutto a netto
+                });
+            });
+
+        return view('expenses.index', compact('expenses', 'monthlyNetSum', 'monthlyVatSum'));
     }
 
     public function create()
