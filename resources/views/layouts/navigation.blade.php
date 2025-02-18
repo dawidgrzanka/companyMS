@@ -143,6 +143,9 @@
             <x-responsive-nav-link :href="route('clients.index')" :active="request()->routeIs('clients.index')">
                 {{ __('Lista klientów') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('expenses.index')" :active="request()->routeIs('expenses.index')">
+                {{ __('Wydatki') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
