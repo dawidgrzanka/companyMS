@@ -40,7 +40,9 @@
             <td>{{ $expense->sale_date }}</td>
             <td>{{ $expense->seller_name }}</td>
             <td>{{ number_format($expense->items->sum('net_value'), 2) }} zł</td>
-            <td>%</td>
+            <td>{{ number_format($expense->items->sum(function ($item) {
+                return $item->gross_value - $item->net_value;  // Różnica między wartością brutto a netto
+            }), 2) }} zł</td>
             <td>{{ number_format($expense->items->sum('gross_value'), 2) }} zł</td>
         </tr>
         @endforeach

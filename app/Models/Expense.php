@@ -10,20 +10,17 @@ class Expense extends Model
     use HasFactory;
 
     protected $fillable = [
-        'type',
-        'number',
-        'issue_date',
-        'issue_place',
-        'sale_date',
-        'seller_type',
-        'seller_name',
-        'seller_nip',
-        'seller_street',
-        'seller_postal_code',
-        'seller_city',
-        'seller_bank_account',
-        'seller_bank_name'
+        'type', 'number', 'issue_date', 'issue_place', 'sale_date',
+        'seller_type', 'seller_name', 'seller_nip', 'seller_street',
+        'seller_postal_code', 'seller_city', 'seller_bank_account', 'seller_bank_name'
     ];
+
+    protected $casts = [
+        'issue_date' => 'date',
+        'sale_date' => 'date',
+    ];
+
+    protected $guarded = ['id'];
 
     public function items()
     {
@@ -35,7 +32,9 @@ class Expense extends Model
     {
         parent::boot();
         static::deleting(function ($expense) {
-            $expense->items()->delete();
+            foreach ($expense->items as $item) {
+                $item->delete();
+            }
         });
     }
 
@@ -52,12 +51,12 @@ class Expense extends Model
 
     public function getTotalVatAttribute()
     {
-        return $this->total_gross - $this->total_net;
+        return $this->getTotalGrossAttribute() - $this->getTotalNetAttribute();
     }
 
     // Formatowanie NIP (np. usunięcie zbędnych spacji)
-    public function setSellerNipAttribute($value)
+    public function getSellerNipAttribute($value)
     {
-        $this->attributes['seller_nip'] = preg_replace('/\s+/', '', $value);
+        return $value ? preg_replace('/(\d{3})(\d{3})(\d{2})(\d{2})/', '$1-$2-$3-$4', $value) : null;
     }
 }
