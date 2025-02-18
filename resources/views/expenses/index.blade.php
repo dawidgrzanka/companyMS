@@ -4,18 +4,11 @@
 <h1>Lista wydatków</h1>
 <br>
 <div class="row mb-3">
-   <!-- <div class="col-md-3">
-        <form method="GET" action="{{ route('products.index') }}" class="d-flex">
-            <input type="text" name="search" value="{{ request()->get('search') }}" class="form-control me-2" placeholder="Wyszukaj produkt..." style="border-radius: 0.5rem">
-            <button class="btn btn-outline-primary" type="submit">Szukaj</button>
-        </form>
+@if(session('success'))
+    <div class="alert alert-success mt-3">
+        {{ session('success') }}
     </div>
-    <div class="col-md-2">
-        <a href="{{ route('products.index', ['sort' => 'stock', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc']) }}" class="btn btn-outline-secondary w-100" style="font-size: 0.8rem">
-            Sortuj po dostępnej ilości ({{ request('direction') === 'asc' ? 'Rosnąco' : 'Malejąco' }})
-        </a>
-    </div>
-</div> -->
+@endif
 <!-- Formularz wyboru okresu -->
 <form method="GET" action="{{ route('expenses.index') }}" class="row mb-3">
     <div class="col-md-3">
@@ -54,6 +47,7 @@
             <th scope="col">Wartość netto</th>
             <th scope="col">Wartość VAT</th>
             <th scope="col">Wartość brutto</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
@@ -69,6 +63,9 @@
                 return $item->gross_value - $item->net_value;  // Różnica między wartością brutto a netto
             }), 2) }} zł</td>
             <td>{{ number_format($expense->items->sum('gross_value'), 2) }} zł</td>
+            <td>
+                <a href="{{ route('expenses.show', $expense->id) }}" class="btn btn-outline-info">Szczegóły</a>
+            </td>
         </tr>
         @endforeach
     </tbody>

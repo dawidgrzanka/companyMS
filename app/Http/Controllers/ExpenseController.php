@@ -121,4 +121,25 @@ class ExpenseController extends Controller
         }
     }
 
+    public function show($id)
+    {
+        // Znajdź wydatek po ID
+        $expense = Expense::with('items')->findOrFail($id);
+
+        // Zwróć widok z danym wydatkiem
+        return view('expenses.show', compact('expense'));
+    }
+
+    public function destroy($id)
+    {
+        // Znajdź wydatek po ID
+        $expense = Expense::findOrFail($id);
+
+        // Usuń wydatek
+        $expense->delete();
+
+        // Przekierowanie z komunikatem o sukcesie
+        return redirect()->route('expenses.index')->with('success', 'Wydatek został usunięty.');
+    }
+
 }
