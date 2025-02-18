@@ -20,6 +20,10 @@ class ExpenseItem extends Model
         'gross_value'
     ];
 
+    protected $casts = [
+        'quantity' => 'decimal:2', // zapisywanie i pobieranie jako decimal
+    ];
+
     public function expense()
     {
         return $this->belongsTo(Expense::class);

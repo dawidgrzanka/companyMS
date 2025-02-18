@@ -50,7 +50,7 @@ class ExpenseController extends Controller
 
     public function store(Request $request)
     {
-         // Zatrzyma działanie i pokaże dane formularza
+        // Zatrzymanie działania i pokazanie danych formularza
         $validatedData = $request->validate([
             'type' => 'required|string',
             'number' => 'required|string|unique:expenses,number,NULL,id,type,' . $request->type,
@@ -70,7 +70,7 @@ class ExpenseController extends Controller
             'items.*.quantity' => 'required|numeric|min:1',
             'items.*.unit' => 'required|string',
             'items.*.net_price' => 'required|numeric|min:0',
-            'items.*.vat_rate' => 'required|numeric|in:0,5,8,23',
+            'items.*.vat_rate' => 'required|in:ZW,23,8,7,5,0,NP,Inne',
         ]);
 
         try {
@@ -92,14 +92,34 @@ class ExpenseController extends Controller
                 'seller_bank_account' => $validatedData['seller_bank_account'] ?? null,
                 'seller_bank_name' => $validatedData['seller_bank_name'] ?? null,
             ]);
-            
+
             if (!$expense) {
                 dd('Błąd zapisu wydatku!');
             }
-            
 
             // Dodanie pozycji do ExpenseItem
             foreach ($validatedData['items'] as $item) {
+                // Ustawienie wartości VAT
+                if (in_array($item['vat_rate'], ['ZW', 'NP'])) {
+                    // Dla "ZW" lub "NP" VAT ustawiamy na 0 (brak VAT)
+                    $vatRate = 0;
+                } else {
+                    // W przeciwnym razie traktujemy vat_rate jako liczbę
+                    $vatRate = (float) $item['vat_rate'];
+                }
+            
+                // Obliczanie wartości netto
+                $netValue = round($item['quantity'] * $item['net_price'], 2);
+            
+                // Dla stawek "ZW" i "NP" wartość brutto = wartość netto (brak VAT)
+                if ($vatRate == 0) {
+                    $grossValue = $netValue;
+                } else {
+                    // Dla innych stawek VAT obliczamy brutto
+                    $grossValue = round($netValue * (1 + ($vatRate / 100)), 2);
+                }
+
+                // Tworzenie pozycji wydatku
                 ExpenseItem::create([
                     'expense_id' => $expense->id,
                     'name' => $item['name'],
@@ -107,8 +127,8 @@ class ExpenseController extends Controller
                     'unit' => $item['unit'],
                     'net_price' => $item['net_price'],
                     'vat_rate' => $item['vat_rate'],
-                    'net_value' => round($item['quantity'] * $item['net_price'], 2),
-                    'gross_value' => round($item['quantity'] * $item['net_price'] * (1 + ($item['vat_rate'] / 100)), 2),
+                    'net_value' => $netValue,
+                    'gross_value' => $grossValue,
                 ]);
             }
 
@@ -120,6 +140,7 @@ class ExpenseController extends Controller
             return back()->with('error', 'Błąd: ' . $e->getMessage())->withInput();
         }
     }
+
 
     public function show($id)
     {

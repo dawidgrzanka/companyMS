@@ -9,44 +9,46 @@
 
         <!-- Typ dokumentu -->
         @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="mb-3">
             <label for="type" class="form-label">Typ dokumentu</label>
             <select name="type" class="form-control" required>
-                <option value="Faktura">Faktura</option>
-                <option value="Faktura Proforma">Faktura Proforma</option>
-                <option value="Własny dokument nieksięgowy">Własny dokument nieksięgowy</option>
-                <option value="Paragon">Paragon</option>
-                <option value="Paragon z NIP">Paragon z NIP</option>
+                <option value="Faktura" {{ old('type') == 'Faktura' ? 'selected' : '' }}>Faktura</option>
+                <option value="Faktura Proforma" {{ old('type') == 'Faktura Proforma' ? 'selected' : '' }}>Faktura Proforma</option>
+                <option value="Własny dokument nieksięgowy" {{ old('type') == 'Własny dokument nieksięgowy' ? 'selected' : '' }}>Własny dokument nieksięgowy</option>
+                <option value="Paragon" {{ old('type') == 'Paragon' ? 'selected' : '' }}>Paragon</option>
+                <option value="Paragon z NIP" {{ old('type') == 'Paragon z NIP' ? 'selected' : '' }}>Paragon z NIP</option>
             </select>
         </div>
 
         <!-- Numer dokumentu -->
         <div class="mb-3">
             <label for="number" class="form-label">Numer dokumentu</label>
-            <input type="text" name="number" class="form-control" required>
+            <input type="text" name="number" class="form-control" value="{{ old('number') }}" required>
         </div>
 
         <!-- Data wystawienia i miejsce wystawienia -->
         <div class="mb-3">
             <label for="issue_date" class="form-label">Data wystawienia</label>
-            <input type="date" name="issue_date" class="form-control" required>
+            <input type="date" name="issue_date" class="form-control" value="{{ old('issue_date') }}" required>
         </div>
 
         <div class="mb-3">
             <label for="issue_place" class="form-label">Miejsce wystawienia</label>
-            <input type="text" name="issue_place" class="form-control" required>
+            <input type="text" name="issue_place" class="form-control" value="{{ old('issue_place') }}" required>
         </div>
+        
         <div class="mb-3">
-            <label for="issue_place" class="form-label">Data sprzedaży</label>
-            <input type="date" name="sale_date" class="form-control" required>
+            <label for="sale_date" class="form-label">Data sprzedaży</label>
+            <input type="date" name="sale_date" class="form-control" value="{{ old('sale_date') }}" required>
         </div>
 
         <!-- Dane Sprzedawcy -->
@@ -55,34 +57,34 @@
         <div class="mb-3">
             <label for="seller_type" class="form-label">Rodzaj sprzedawcy</label>
             <select name="seller_type" class="form-control" required>
-                <option value="Firma">Firma</option>
-                <option value="Osoba prywatna">Osoba prywatna</option>
+                <option value="Firma" {{ old('seller_type') == 'Firma' ? 'selected' : '' }}>Firma</option>
+                <option value="Osoba prywatna" {{ old('seller_type') == 'Osoba prywatna' ? 'selected' : '' }}>Osoba prywatna</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label for="seller_name" class="form-label">Nazwa firmy / Imię i nazwisko</label>
-            <input type="text" name="seller_name" class="form-control" required>
+            <input type="text" name="seller_name" class="form-control" value="{{ old('seller_name') }}" required>
         </div>
 
         <div class="mb-3">
             <label for="seller_nip" class="form-label">NIP (opcjonalnie)</label>
-            <input type="text" name="seller_nip" class="form-control">
+            <input type="text" name="seller_nip" class="form-control" value="{{ old('seller_nip') }}">
         </div>
 
         <div class="mb-3">
             <label for="seller_street" class="form-label">Ulica i nr</label>
-            <input type="text" name="seller_street" class="form-control" required>
+            <input type="text" name="seller_street" class="form-control" value="{{ old('seller_street') }}" required>
         </div>
 
         <div class="mb-3">
             <label for="seller_postal_code" class="form-label">Kod pocztowy</label>
-            <input type="text" name="seller_postal_code" class="form-control" required>
+            <input type="text" name="seller_postal_code" class="form-control" value="{{ old('seller_postal_code') }}" required>
         </div>
 
         <div class="mb-3">
             <label for="seller_city" class="form-label">Miejscowość</label>
-            <input type="text" name="seller_city" class="form-control" required>
+            <input type="text" name="seller_city" class="form-control" value="{{ old('seller_city') }}" required>
         </div>
 
         <!-- Pozycje zakupowe -->
@@ -102,24 +104,28 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td><input type="text" name="items[0][name]" class="form-control" required></td>
-                    <td><input type="number" name="items[0][quantity]" class="form-control quantity" required></td>
-                    <td><input type="text" name="items[0][unit]" class="form-control" required></td>
-                    <td><input type="number" name="items[0][net_price]" class="form-control net_price" step="0.01" required></td>
-                    <td><select name="items[0][vat_rate]" class="form-control vat_rate">
-                        <option value="23">23%</option>
-                        <option value="8">8%</option>
-                        <option value="7">7%</option>
-                        <option value="5">5%</option>
-                        <option value="0">0%</option>
-                        <option value="ZW">ZW</option>
-                        <option value="NP">NP</option>
-                    </select></td>
-                    <td><input type="text" class="form-control net_value" readonly></td>
-                    <td><input type="text" class="form-control gross_value" readonly></td>
-                    <td><button type="button" class="btn btn-danger remove-item">Usuń</button></td>
-                </tr>
+                @foreach(old('items', [[]]) as $index => $item)
+                    <tr>
+                        <td><input type="text" name="items[{{ $index }}][name]" class="form-control" value="{{ $item['name'] ?? '' }}" required></td>
+                        <td><input type="number" name="items[{{ $index }}][quantity]" class="form-control quantity" value="{{ $item['quantity'] ?? '' }}" step="0.01" required></td>
+                        <td><input type="text" name="items[{{ $index }}][unit]" class="form-control" value="{{ $item['unit'] ?? '' }}" required></td>
+                        <td><input type="number" name="items[{{ $index }}][net_price]" class="form-control net_price" value="{{ $item['net_price'] ?? '' }}" step="0.01" required></td>
+                        <td>
+                            <select name="items[{{ $index }}][vat_rate]" class="form-control vat_rate">
+                                <option value="23" {{ (isset($item['vat_rate']) && $item['vat_rate'] == '23') ? 'selected' : '' }}>23%</option>
+                                <option value="8" {{ (isset($item['vat_rate']) && $item['vat_rate'] == '8') ? 'selected' : '' }}>8%</option>
+                                <option value="7" {{ (isset($item['vat_rate']) && $item['vat_rate'] == '7') ? 'selected' : '' }}>7%</option>
+                                <option value="5" {{ (isset($item['vat_rate']) && $item['vat_rate'] == '5') ? 'selected' : '' }}>5%</option>
+                                <option value="0" {{ (isset($item['vat_rate']) && $item['vat_rate'] == '0') ? 'selected' : '' }}>0%</option>
+                                <option value="ZW" {{ (isset($item['vat_rate']) && $item['vat_rate'] == 'ZW') ? 'selected' : '' }}>ZW</option>
+                                <option value="NP" {{ (isset($item['vat_rate']) && $item['vat_rate'] == 'NP') ? 'selected' : '' }}>NP</option>
+                            </select>
+                        </td>
+                        <td><input type="text" class="form-control net_value" value="{{ $item['net_value'] ?? '' }}" readonly></td>
+                        <td><input type="text" class="form-control gross_value" value="{{ $item['gross_value'] ?? '' }}" readonly></td>
+                        <td><button type="button" class="btn btn-danger remove-item">Usuń</button></td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
 
@@ -128,10 +134,11 @@
     </form>
 </div>
 @endsection
+
 @push('scripts')
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    let itemIndex = 1; // Indeks dla kolejnych pozycji
+    let itemIndex = {{ count(old('items', [[]])) }}; // Indeks dla kolejnych pozycji
 
     // Funkcja do obliczania wartości netto i brutto
     function updateValues(row) {

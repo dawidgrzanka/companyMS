@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('expense_id')->constrained()->onDelete('cascade'); // Połączenie z wydatkiem
             $table->string('name'); // Nazwa produktu/usługi
-            $table->integer('quantity'); // Ilość
+            $table->decimal('quantity'); // Ilość
             $table->string('unit'); // Jednostka (np. szt., m², kg)
             $table->decimal('net_price', 10, 2); // Cena netto
             $table->enum('vat_rate', ['ZW', '23', '8', '7', '5', '0', 'NP', 'Inne']); // VAT %
