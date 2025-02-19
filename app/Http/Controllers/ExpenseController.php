@@ -126,7 +126,7 @@ class ExpenseController extends Controller
                     'quantity' => $item['quantity'],
                     'unit' => $item['unit'],
                     'net_price' => $item['net_price'],
-                    'vat_rate' => $item['vat_rate'],
+                    'vat_rate' => (string) $item['vat_rate'],
                     'net_value' => $netValue,
                     'gross_value' => $grossValue,
                 ]);
