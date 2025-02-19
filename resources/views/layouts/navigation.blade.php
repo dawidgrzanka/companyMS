@@ -16,7 +16,7 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('START') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('products.index')" :active="request()->routeIs('services.index')">
+                    <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
                         {{ __('Materiał') }}
                     </x-nav-link>
                     <div class="hidden sm:flex sm:items-center sm:ml-6 pt-1">
@@ -34,10 +34,10 @@
                             </x-slot>
 
                             <x-slot name="content">
-                                <x-dropdown-link :href="route('tasks.index')" active="request()->routeIs('tasks.index')">
+                                <x-dropdown-link :href="route('tasks.index')" :active="request()->routeIs('tasks.index')">
                                     {{ __('Lista inwestycji') }}
                                 </x-dropdown-link>
-                                <x-dropdown-link :href="route('clients.index')" active="request()->routeIs('permissions')">
+                                <x-dropdown-link :href="route('clients.index')" :active="request()->routeIs('clients.index')">
                                     {{ __('Lista klientów') }}
                                 </x-dropdown-link>
                             </x-slot>
@@ -70,10 +70,10 @@
                             </x-slot>
 
                             <x-slot name="content">
-                                <x-dropdown-link :href="route('meetings.index')" active="request()->routeIs('meetings.index')">
+                                <x-dropdown-link :href="route('meetings.index')" :active="request()->routeIs('meetings.index')">
                                     {{ __('Spotkania') }}
                                 </x-dropdown-link>
-                                <x-dropdown-link :href="route('notes.index')" active="request()->routeIs('notes.index')">
+                                <x-dropdown-link :href="route('notes.index')" :active="request()->routeIs('notes.index')">
                                     {{ __('Notatki') }}
                                 </x-dropdown-link>
                             </x-slot>

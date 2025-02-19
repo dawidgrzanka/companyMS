@@ -21,7 +21,7 @@ Route::resource('notes', NoteController::class);
 Route::get('invoices/{invoice}/exportToPDF', [InvoiceController::class, 'exportToPDF'])->name('invoices.exportToPDF');
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::get('/dashboard', function () {
